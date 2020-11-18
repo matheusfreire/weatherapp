@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="peak_a_place">Peak a place</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+    <string name="provide_value">Please, provide a value</string>
+    <string name="no_internet">No connection detected</string>
+</resources>
