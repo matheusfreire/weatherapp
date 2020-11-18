@@ -1,7 +1,10 @@
 package br.com.msf.weather.view;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.test.espresso.IdlingResource;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,6 +27,8 @@ import br.com.msf.weather.R;
 import br.com.msf.weather.viewmodel.WeatherViewModel;
 
 public class MainActivity extends AppCompatActivity {
+
+    private SimpleIdlingResource mIdlingResource;
 
     private WeatherViewModel viewModel;
     private FrameLayout frameLayoutProgress;
@@ -51,28 +56,28 @@ public class MainActivity extends AppCompatActivity {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 boolean isValid = validateInputs();
                 if(isValid){
-                    if(isNetworkConnected()){
-                        Snackbar.make(v, R.string.no_internet, Snackbar.LENGTH_SHORT).show();
-                        return false;
+                    if (mIdlingResource != null) {
+                        mIdlingResource.setIdleState(false);
                     }
                     hideKeyboard();
                     frameLayoutProgress.setVisibility(View.VISIBLE);
                     viewModel.requestWeather(getDoubleFromText(txtLati.getText()), getDoubleFromText(txtLong.getText()));
+                    createObserver();
                 }
                 return isValid;
             }
             return false;
         });
+    }
 
+    private void createObserver(){
         viewModel.getWeatherLiveData().observe(this, weather -> {
+            if (mIdlingResource != null) {
+                mIdlingResource.setIdleState(false);
+            }
             frameLayoutProgress.setVisibility(View.GONE);
             Log.d("MainActivity", weather.toString());
         });
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager connectivityManager = ((ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
     private void hideKeyboard() {
@@ -100,5 +105,14 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isTextEmpty(@NotNull Editable text){
         return text.toString().isEmpty();
+    }
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
     }
 }

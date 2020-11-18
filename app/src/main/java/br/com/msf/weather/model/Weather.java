@@ -39,10 +39,18 @@ public class Weather implements Parcelable {
 
     public static Weather fromJson(JSONObject jsonObj) throws JSONException {
         Weather weather = new Weather();
-        weather.setLatitude(jsonObj.getDouble("latitude"));
-        weather.setLongitude(jsonObj.getDouble("longitude"));
-        weather.setTimezone(jsonObj.getString("timezone"));
-        weather.setCurrently(Currently.fromJson(jsonObj.getJSONObject("currently")));
+        if(jsonObj.has("latitude")){
+            weather.setLatitude(jsonObj.getDouble("latitude"));
+        }
+        if(jsonObj.has("longitude")){
+            weather.setLongitude(jsonObj.getDouble("longitude"));
+        }
+        if(jsonObj.has("timezone")){
+            weather.setTimezone(jsonObj.getString("timezone"));
+        }
+        if(jsonObj.has("currently")){
+            weather.setCurrently(Currently.fromJson(jsonObj.getJSONObject("currently")));
+        }
         return weather;
     }
 

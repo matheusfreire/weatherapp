@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import br.com.msf.weather.BuildConfig;
@@ -21,12 +22,14 @@ import okhttp3.ResponseBody;
 
 public class WeatherRepository{
 
+    private MutableLiveData<Weather> weatherMutableLiveData = new MutableLiveData<>();
+
     private final OkHttpClient client = new OkHttpClient().newBuilder()
                                     .connectTimeout(10, TimeUnit.SECONDS)
                                     .readTimeout(20, TimeUnit.SECONDS)
                                     .build();
 
-    public void requestWeather(double latitude, double longitude, MutableLiveData<Weather> weatherMutableLiveData) {
+    public MutableLiveData<Weather> requestWeather(double latitude, double longitude) {
 
         String LONG_LATI_QUERY = "%1$,.6f,%2$,.6f";
         HttpUrl httpUrl = new HttpUrl.Builder()
@@ -34,7 +37,7 @@ public class WeatherRepository{
                 .host(BuildConfig.BASE_URL)
                 .addPathSegment(BuildConfig.FORECAST)
                 .addPathSegment(BuildConfig.KEY)
-                .addPathSegment(String.format(LONG_LATI_QUERY, latitude, longitude))
+                .addPathSegment(String.format(Locale.US,LONG_LATI_QUERY, latitude, longitude))
                 .build();
 
         Request request = new Request.Builder().url(httpUrl).build();
@@ -49,7 +52,7 @@ public class WeatherRepository{
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                     if (!response.isSuccessful()) {
-                        throw new IOException("Unexpected code " + response);
+                        weatherMutableLiveData.postValue(null);
                     }
                     String body = responseBody.string(); // can only call string() once or you'll get an IllegalStateException
                     JSONObject jsonObj = null;
@@ -62,8 +65,10 @@ public class WeatherRepository{
                     weatherMutableLiveData.postValue(weather);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    weatherMutableLiveData.postValue(null);
                 }
             }
         });
+        return weatherMutableLiveData;
     }
 }
