@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        viewDataBinding.setViewModel(viewModel);
     }
 
     @Override
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             viewDataBinding.progressBar.setVisibility(View.GONE);
             viewDataBinding.txtViewError.setVisibility(weather == null ? View.VISIBLE : View.GONE);
             viewDataBinding.scrollInfo.setVisibility(weather != null ? View.VISIBLE : View.GONE);
-            viewModel.setWeather(weather);
+            viewDataBinding.setWeather(weather);
         });
     }
 

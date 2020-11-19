@@ -12,7 +12,7 @@ import br.com.msf.weather.network.WeatherRepository;
 public class WeatherViewModel extends ViewModel{
 
     private Weather weather;
-    private final WeatherRepository weatherRepository  = new WeatherRepository();;
+    private final WeatherRepository weatherRepository  = new WeatherRepository();
 
     private LiveData<Weather> weatherLiveData;
 
@@ -33,7 +33,7 @@ public class WeatherViewModel extends ViewModel{
     }
 
     public int getTzVisibility(){
-        return stringEmpty(weather.getTimezone())
+        return weather == null || stringEmpty(weather.getTimezone())
                 ? View.GONE
                 : View.VISIBLE;
     }
