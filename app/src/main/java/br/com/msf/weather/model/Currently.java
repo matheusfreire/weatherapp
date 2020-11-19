@@ -285,4 +285,5 @@ public class Currently implements Parcelable {
     public void setOzone(BigDecimal ozone) {
         this.ozone = ozone;
     }
+
 }

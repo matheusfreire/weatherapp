@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-            <variable
-                name="weather"
-                type="br.com.msf.weather.model.Weather" />
-        </data>
+        <import type="android.view.View" />
+        <variable
+            name="viewModel"
+            type="br.com.msf.weather.viewmodel.WeatherViewModel" />
+    </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.MainActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/constraintInfos"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintInfos"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".view.MainActivity">
@@ -42,10 +44,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/five_dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtInputLati"
-                app:layout_constraintBottom_toTopOf="@+id/guideline">
+                app:layout_constraintTop_toBottomOf="@+id/txtInputLati">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtEditLong"
@@ -64,26 +66,28 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent=".25" />
 
-            <TextView android:id="@+id/txtViewError"
+            <TextView
+                android:id="@+id/txtViewError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
                 android:text="@string/error_happen"
-                app:layout_constraintTop_toBottomOf="@id/guideline"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="24sp"
                 android:visibility="gone"
-                tools:text="An error happen, please try again"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guideline"
+                tools:text="An error happen, please try again" />
 
-            <ScrollView android:id="@+id/scrollInfo"
+            <ScrollView
+                android:id="@+id/scrollInfo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/zero_dp"
-                app:layout_constraintTop_toBottomOf="@id/guideline"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:visibility="gone">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guideline">
 
 
                 <LinearLayout
@@ -91,170 +95,218 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout android:id="@+id/linearTz"
+                    <LinearLayout
+                        android:id="@+id/linearTz"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="1"
-                        android:padding="@dimen/three_dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.7"
-                            android:textSize="@dimen/twenty_sp"
-                            android:text="@string/tz"/>
-
-                        <TextView android:id="@+id/txtTimezone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/twenty_two_sp"
-                            android:layout_weight="0.3"
-                            android:text="@{weather.timezone}"
-                            tools:text="@string/tz"/>
-                    </LinearLayout>
-
-                    <LinearLayout android:id="@+id/linearSummary"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="1"
-                        android:padding="@dimen/three_dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.7"
-                            android:textSize="@dimen/twenty_sp"
-                            android:text="@string/summary"/>
-
-                        <TextView android:id="@+id/txtSummary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/twenty_two_sp"
-                            android:layout_weight="0.3"
-                            android:text="@{weather.currently.summary}"
-                            tools:text="@string/summary"/>
-                    </LinearLayout>
-
-                    <LinearLayout android:id="@+id/linearPrecipIntensity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="1"
                         android:padding="@dimen/three_dp"
-                        android:gravity="center">
+                        android:visibility="@{viewModel.tzVisibility, default=gone}"
+                        android:weightSum="1">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.7"
-                            android:textSize="@dimen/twenty_sp"
-                            android:text="@string/precipIntensity"/>
+                            android:text="@string/tz"
+                            android:textSize="@dimen/twenty_sp" />
 
-                        <TextView android:id="@+id/txtPrecipIntensity"
+                        <TextView
+                            android:id="@+id/txtTimezone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/twenty_two_sp"
                             android:layout_weight="0.3"
-                            android:text="@{weather.currently.precipIntensity.toString()}"
-                            tools:text="0.0"/>
+                            android:text="@{viewModel.weather.timezone}"
+                            android:textSize="@dimen/twenty_two_sp"
+                            tools:text="@string/tz" />
                     </LinearLayout>
 
-                    <LinearLayout android:id="@+id/linearPrecipProbability"
+                    <LinearLayout
+                        android:id="@+id/linearSummary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="1"
                         android:padding="@dimen/three_dp"
-                        android:gravity="center">
+                        android:visibility="@{viewModel.summaryVisibility, default=gone}"
+                        android:weightSum="1">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.7"
-                            android:textSize="@dimen/twenty_sp"
-                            android:text="@string/precipProbability"/>
+                            android:text="@string/summary"
+                            android:textSize="@dimen/twenty_sp" />
 
-                        <TextView android:id="@+id/txtPrecipProbability"
+                        <TextView
+                            android:id="@+id/txtSummary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/twenty_two_sp"
                             android:layout_weight="0.3"
-                            android:text="@{weather.currently.precipProbability.toString()}"
-                            tools:text="0.0"/>
+                            android:text="@{viewModel.currently.summary}"
+                            android:textSize="@dimen/twenty_two_sp"
+                            tools:text="@string/summary" />
                     </LinearLayout>
 
-                    <LinearLayout android:id="@+id/linearApparentTemperature"
+                    <LinearLayout
+                        android:id="@+id/linearPrecipIntensity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="horizontal"
-                        android:weightSum="1"
                         android:padding="@dimen/three_dp"
-                        android:gravity="center">
+                        android:visibility="@{viewModel.precipIntensityVisibility, default=gone}"
+                        android:weightSum="1">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.7"
-                            android:textSize="@dimen/twenty_sp"
-                            android:text="@string/apparentTemperature"/>
+                            android:text="@string/precipIntensity"
+                            android:textSize="@dimen/twenty_sp" />
 
-                        <TextView android:id="@+id/txtApparentTemperature"
+                        <TextView
+                            android:id="@+id/txtPrecipIntensity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/twenty_two_sp"
                             android:layout_weight="0.3"
-                            android:text="@{weather.currently.apparentTemperature.toString()}"
-                            tools:text="0.0"/>
+                            android:text="@{viewModel.currently.precipIntensity.toString()}"
+                            android:textSize="@dimen/twenty_two_sp"
+                            tools:text="0.0" />
                     </LinearLayout>
 
-                    <LinearLayout android:id="@+id/linearHumidity"
+                    <LinearLayout
+                        android:id="@+id/linearPrecipProbability"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="horizontal"
-                        android:weightSum="1"
                         android:padding="@dimen/three_dp"
-                        android:gravity="center">
+                        android:visibility="@{viewModel.precipProbabilityVisibility, default=gone}"
+                        android:weightSum="1">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.7"
-                            android:textSize="@dimen/twenty_sp"
-                            android:text="@string/humidity"/>
+                            android:text="@string/precipProbability"
+                            android:textSize="@dimen/twenty_sp" />
 
-                        <TextView android:id="@+id/txtHumidity"
+                        <TextView
+                            android:id="@+id/txtPrecipProbability"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/twenty_two_sp"
                             android:layout_weight="0.3"
-                            android:text="@{weather.currently.humidity.toString()}"
-                            tools:text="0.0"/>
+                            android:text="@{viewModel.weather.currently.precipProbability.toString()}"
+                            android:textSize="@dimen/twenty_two_sp"
+                            tools:text="0.0" />
                     </LinearLayout>
 
-                    <LinearLayout android:id="@+id/linearPressure"
+                    <LinearLayout
+                        android:id="@+id/linearApparentTemperature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="horizontal"
-                        android:weightSum="1"
                         android:padding="@dimen/three_dp"
-                        android:gravity="center">
+                        android:visibility="@{viewModel.apparentTemperatureVisibility, default=gone}"
+                        android:weightSum="1">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.7"
-                            android:textSize="@dimen/twenty_sp"
-                            android:text="@string/pressure"/>
+                            android:text="@string/apparentTemperature"
+                            android:textSize="@dimen/twenty_sp" />
 
-                        <TextView android:id="@+id/txtPressure"
+                        <TextView
+                            android:id="@+id/txtApparentTemperature"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/twenty_two_sp"
                             android:layout_weight="0.3"
-                            android:text="@{weather.currently.pressure.toString()}"
-                            tools:text="0.0"/>
+                            android:text="@{viewModel.currently.apparentTemperature.toString()}"
+                            android:textSize="@dimen/twenty_two_sp"
+                            tools:text="0.0" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearHumidity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/three_dp"
+                        android:visibility="@{viewModel.humidityVisibility, default=gone}"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:text="@string/humidity"
+                            android:textSize="@dimen/twenty_sp" />
+
+                        <TextView
+                            android:id="@+id/txtHumidity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:text="@{viewModel.currently.humidity.toString()}"
+                            android:textSize="@dimen/twenty_two_sp"
+                            tools:text="0.0" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearPressure"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/three_dp"
+                        android:visibility="@{viewModel.pressureVisibility, default=gone}"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:text="@string/pressure"
+                            android:textSize="@dimen/twenty_sp" />
+
+                        <TextView
+                            android:id="@+id/txtPressure"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:text="@{viewModel.currently.pressure.toString()}"
+                            android:textSize="@dimen/twenty_two_sp"
+                            tools:text="0.0" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearPrecipeType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/three_dp"
+                        android:visibility="@{viewModel.precipeTypeVisibility, default=gone}"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:text="@string/pressure"
+                            android:textSize="@dimen/twenty_sp" />
+
+                        <TextView
+                            android:id="@+id/txtPrecipType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:text="@{viewModel.currently.precipType}"
+                            android:textSize="@dimen/twenty_two_sp"
+                            tools:text="0.0" />
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>
