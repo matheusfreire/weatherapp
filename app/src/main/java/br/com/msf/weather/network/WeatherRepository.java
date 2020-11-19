@@ -20,14 +20,16 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class WeatherRepository{
+public class WeatherRepository {
 
     private MutableLiveData<Weather> weatherMutableLiveData = new MutableLiveData<>();
 
     private final OkHttpClient client = new OkHttpClient().newBuilder()
-                                    .connectTimeout(10, TimeUnit.SECONDS)
-                                    .readTimeout(20, TimeUnit.SECONDS)
-                                    .build();
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(false)
+            .build();
 
     public MutableLiveData<Weather> requestWeather(double latitude, double longitude) {
 
@@ -37,7 +39,7 @@ public class WeatherRepository{
                 .host(BuildConfig.BASE_URL)
                 .addPathSegment(BuildConfig.FORECAST)
                 .addPathSegment(BuildConfig.KEY)
-                .addPathSegment(String.format(Locale.US,LONG_LATI_QUERY, latitude, longitude))
+                .addPathSegment(String.format(Locale.US, LONG_LATI_QUERY, latitude, longitude))
                 .build();
 
         Request request = new Request.Builder().url(httpUrl).build();
@@ -55,7 +57,7 @@ public class WeatherRepository{
                         weatherMutableLiveData.postValue(null);
                     }
                     String body = responseBody.string();
-                    if(body != null && body.contains("error")){
+                    if (body != null && body.contains("error")) {
                         throw new Exception();
                     }
                     JSONObject jsonObj = null;

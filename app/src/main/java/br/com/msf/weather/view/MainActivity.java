@@ -64,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
             viewDataBinding.progressBar.setVisibility(View.GONE);
             viewDataBinding.txtViewError.setVisibility(weather == null ? View.VISIBLE : View.GONE);
             viewDataBinding.scrollInfo.setVisibility(weather != null ? View.VISIBLE : View.GONE);
-            viewDataBinding.setWeather(weather);
+            viewModel.setWeather(weather);
+            viewDataBinding.setViewModel(viewModel);
         });
     }
 

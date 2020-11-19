@@ -13,4 +13,5 @@
     <string name="apparentTemperature">Apparent Temperature</string>
     <string name="humidity">Humidity</string>
     <string name="pressure">Pressure</string>
+    <string name="precipType">Precipe Type</string>
 </resources>
