@@ -54,7 +54,10 @@ public class WeatherRepository{
                     if (!response.isSuccessful()) {
                         weatherMutableLiveData.postValue(null);
                     }
-                    String body = responseBody.string(); // can only call string() once or you'll get an IllegalStateException
+                    String body = responseBody.string();
+                    if(body != null && body.contains("error")){
+                        throw new Exception();
+                    }
                     JSONObject jsonObj = null;
                     try {
                         jsonObj = new JSONObject(body);
@@ -63,7 +66,7 @@ public class WeatherRepository{
                     }
                     Weather weather = Weather.fromJson(jsonObj);
                     weatherMutableLiveData.postValue(weather);
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     weatherMutableLiveData.postValue(null);
                 }

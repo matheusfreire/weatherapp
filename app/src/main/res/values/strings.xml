@@ -5,4 +5,12 @@
     <string name="latitude">Latitude</string>
     <string name="provide_value">Please, provide a value</string>
     <string name="no_internet">No connection detected</string>
+    <string name="error_happen">An error occurred, please try again</string>
+    <string name="tz">Timezone</string>
+    <string name="summary">Summary</string>
+    <string name="precipIntensity">Precip Intensity</string>
+    <string name="precipProbability">Precip Probability</string>
+    <string name="apparentTemperature">Apparent Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="pressure">Pressure</string>
 </resources>
