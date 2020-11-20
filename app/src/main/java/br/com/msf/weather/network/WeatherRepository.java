@@ -25,9 +25,10 @@ public class WeatherRepository {
     private MutableLiveData<Weather> weatherMutableLiveData = new MutableLiveData<>();
 
     private final OkHttpClient client = new OkHttpClient().newBuilder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .writeTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(20, TimeUnit.SECONDS)
+            .callTimeout(20, TimeUnit.SECONDS)
             .retryOnConnectionFailure(false)
             .build();
 
