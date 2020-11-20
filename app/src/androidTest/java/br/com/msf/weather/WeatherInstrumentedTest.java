@@ -91,6 +91,7 @@ public class WeatherInstrumentedTest {
         onView(withId(R.id.txtEditLong)).perform(ViewActions.typeText("18.06"));
         onView(withId(R.id.txtEditLong)).perform(pressImeActionButton());
         onView(withId(R.id.txtViewError)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.progressBar)).check(matches(not(isDisplayed())));
     }
 
     @Test
